@@ -12,21 +12,19 @@ D delete 删除数据
 
 Todo.new() 来创建一个 todo
 """
-
-
 class Todo(Model):
-    # @classmethod
-    # def new(cls, form):
-    #     """
-    #     创建并保存一个 todo 并且返回它
-    #     Todo.new({'title': '吃饭'})
-    #     :param form: 一个字典 包含了 todo 的数据
-    #     :return: 创建的 todo 实例
-    #     """
-    #     # 下面一行相当于 t = Todo(form)
-    #     t = cls(form)
-    #     t.save()
-    #     return t
+    @classmethod
+    def new(cls, form):
+        """
+        创建并保存一个 todo 并且返回它
+        Todo.new({'title': '吃饭'})
+        :param form: 一个字典 包含了 todo 的数据
+        :return: 创建的 todo 实例
+        """
+        # 下面一行相当于 t = Todo(form)
+        t = cls(form)
+        t.save()
+        return t
 
     @classmethod
     def update(cls, id, form):
@@ -39,8 +37,6 @@ class Todo(Model):
             # 这里只应该更新我们想要更新的东西
             if key in valid_names:
                 setattr(t, key, form[key])
-        # 更新修改时间
-        t.ut = int(time.time())
         t.save()
         return t
 
@@ -62,6 +58,6 @@ class Todo(Model):
         # 下面的是默认的数据
         self.completed = False
         # ct ut 分别是 created_time  updated_time
-        # 创建时间 和 更新时间
+        # 创建时间和 更新时间
         self.ct = int(time.time())
         self.ut = self.ct

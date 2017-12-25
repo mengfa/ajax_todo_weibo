@@ -43,19 +43,6 @@ class Model(object):
         return path
 
     @classmethod
-    def new(cls, form):
-        """
-        创建并保存一个 model 并且返回它, 比如对于 Todo 而言
-        创建的方式如下
-        Todo.new({'title': '吃饭'})
-        :param form: 一个字典 包含了数据
-        :return: 创建的 model 实例
-        """
-        m = cls(form)
-        m.save()
-        return m
-
-    @classmethod
     def _new_from_dict(cls, d):
         # 因为子元素的 __init__ 需要一个 form 参数
         # 所以这个给一个空字典

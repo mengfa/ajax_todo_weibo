@@ -1,11 +1,9 @@
-from routes.session import session
-from utils import log, response_with_headers
-from utils import template
-from models import User
-
 import random
 
-
+from models.user import User
+from routes.session import session
+from utils import log
+from utils import template
 
 
 def random_str():
@@ -17,7 +15,15 @@ def random_str():
     return s
 
 
-
+def response_with_headers(headers, status_code=200):
+    """
+    Content-Type: text/html
+    Set-Cookie: user=gua
+    """
+    header = 'HTTP/1.1 {} VERY OK\r\n'.format(status_code)
+    header += ''.join(['{}: {}\r\n'.format(k, v)
+                           for k, v in headers.items()])
+    return header
 
 
 def redirect(location, headers=None):
@@ -45,15 +51,9 @@ def route_login(request):
         form = request.form()
         u = User(form)
         if u.validate_login():
-
             user = User.find_by(username=u.username)
             # 设置 session
             session_id = random_str()
-            # print('user.id---------', user.id)
-            # print('session_id---------', session_id)
-            # print('session---------', session)
-
-
             session[session_id] = user.id
             headers['Set-Cookie'] = 'user={}'.format(session_id)
             log('headers response', headers)
@@ -74,9 +74,9 @@ def route_register(request):
     if request.method == 'POST':
         form = request.form()
         u = User(form)
-        if u.validate_register():
-            u.save()
-            result = '注册成功<br> <pre>{}</pre>'.format(User.all())
+        if u.validate_register() is not None:
+            # result = '注册成功<br> <pre>{}</pre>'.format(User.all())
+            print('注册成功', u)
             # 注册成功后 定向到登录页面
             return redirect('/login')
         else:
