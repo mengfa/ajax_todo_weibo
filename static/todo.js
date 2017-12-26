@@ -1,8 +1,21 @@
-var todoTemplate = function(title) {
-    var t = `
-        <div class="todo-cell">
+var timeString = function(timestamp) {
+    t = new Date(timestamp * 1000)
+    t = t.toLocaleTimeString()
+    return t
+}
+
+
+var todoTemplate = function(todo) {
+    var title = todo.title
+    var id = todo.id
+    var ut = timeString(todo.ut)
+     var t = `
+        <div class="todo-cell" id='todo-${id}' data-id="${id}">
+            <button class="todo-edit">编辑</button>
             <button class="todo-delete">删除</button>
-            <span>${title}</span>
+            <span class='todo-title'>${title}</span>
+            <time class='todo-ut'>${ut}</time>
+            
         </div>
     `
     return t
@@ -18,8 +31,8 @@ var todoTemplate = function(title) {
 }
 
 var insertTodo = function(todo) {
-    var title = todo.title
-    var todoCell = todoTemplate(title)
+
+    var todoCell = todoTemplate(todo)
     // 插入 todo-list
     var todoList = e('.todo-list')
     todoList.insertAdjacentHTML('beforeend', todoCell)
@@ -57,8 +70,29 @@ var bindEventTodoAdd = function() {
     })
 }
 
+var bindEventTodoDelete = function () {
+    var todoList = e('.todo-list')
+    todoList.addEventListener('click', function (event) {
+        var self = event.target
+        if(self.classList.contains('todo-delete')){
+            var todoCell = self.parentElement
+            var todo_id = todoCell.dataset.id
+            apiTodoDelete(todo_id, function (r) {
+                todoCell.remove()
+            })
+
+        }
+    })
+    
+
+
+
+
+}
+
 var bindEvents = function() {
     bindEventTodoAdd()
+    bindEventTodoDelete()
 }
 
 var __main = function() {

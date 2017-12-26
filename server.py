@@ -118,7 +118,11 @@ def process_request(connection):
     # 所以这里判断一下防止程序崩溃
     if len(r.split()) < 2:
         connection.close()
+    length = len(r.split())
+    print('len--------',length)
+    print("r---------------",r)
     path = r.split()[1]
+    print("path---------------", path)
     # 创建一个新的 request 并设置
     request = Request()
     request.method = r.split()[0]

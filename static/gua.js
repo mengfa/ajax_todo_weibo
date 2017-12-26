@@ -48,3 +48,11 @@ var apiTodoAdd = function(form, callback) {
     var path = '/api/todo/add'
     ajax('POST', path, form, callback)
 }
+
+var apiTodoDelete = function(id,callback) {
+    var path = '/api/todo/delete?id=' + id
+    log(path)
+    ajax('GET', path, '', callback)
+
+}
+
